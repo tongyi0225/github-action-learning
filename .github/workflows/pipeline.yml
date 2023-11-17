@@ -45,7 +45,7 @@ jobs:
       - name: Check MySQL Connection
         run: |
           mysql --version
-          mysql -hmysql -uroot -ptestrootpass -e"show databases"
+          mysql -h172.17.0.1 -uroot -ptestrootpass -e"show databases"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
