@@ -19,7 +19,8 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    container:
+      image: ubuntu:22.04
     services:  
       mysql:
         image: mysql:8.0
@@ -44,7 +45,7 @@ jobs:
       - name: Check MySQL Connection
         run: |
           mysql --version
-          mysql -h127.0.0.01 -uroot -ptestrootpass -e"show databases"
+          mysql -hmysql -uroot -ptestrootpass -e"show databases"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
