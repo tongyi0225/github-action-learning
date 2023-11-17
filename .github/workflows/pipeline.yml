@@ -30,6 +30,18 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      redis:
+        # Docker Hub image
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps port 6379 on service container to the host
+          - 6379:6379
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -45,7 +57,7 @@ jobs:
       - name: Check MySQL Connection
         run: |
           mysql --version
-          mysql -h172.17.0.1 -uroot -ptestrootpass -e"show databases"
+          mysql -hmysql -uroot -ptestrootpass -e"show databases"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -56,3 +68,19 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      # For more information, see https://docs.npmjs.com/cli/ci.html
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Connect to Redis
+        # Runs a script that creates a Redis client, populates
+        # the client with data, and retrieves data
+        run: node client.js
+        # Environment variable used by the `client.js` script to create
+        # a new Redis client.
+        env:
+          # The hostname used to communicate with the Redis service container
+          REDIS_HOST: redis
+          # The default Redis port
+          REDIS_PORT: 6379
