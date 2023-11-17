@@ -41,6 +41,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y default-mysql-client
 
+      - name: Click MySQL Connection
+        run: |
+          mysql --version
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
