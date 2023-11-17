@@ -41,9 +41,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y default-mysql-client
 
-      - name: Click MySQL Connection
+      - name: Check MySQL Connection
         run: |
           mysql --version
+          mysql -hmysql -uroot -ptestrootpass -e"show databases"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
